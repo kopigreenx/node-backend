@@ -8,12 +8,12 @@ npm start
 
 ## LIST API
 - METHOD GET localhost:3000/todos
-    for GET ALL DATA
+    - for GET ALL DATA
 - METHOD GET localhost:3000/todos/:id
-    For GET Specific data
+    - For GET Specific data
 - METHOD POST localhost:3000/todos 
-   with bodyParse Data for input data
+    - with bodyParse Data for input data
 - METHOD PATCH localhost:3000/todos/:id
-   with bodyParse Data for UPDATING data
+    - with bodyParse Data for UPDATING data
 - METHOD DELETE localhost:3000/todos/:id
-   for DELETING data
+    - for DELETING data
