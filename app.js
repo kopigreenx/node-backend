@@ -3,12 +3,14 @@ const app = express();
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
+const cors = require('cors')
 
 const todoRoutes = require('./api/routes/Todo')
 
 mongoose.connect('mongodb://localhost:27017/my_data',{useNewUrlParser:true})
 
 app.use(morgan('dev'))
+app.use(cors())
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.json())
 
