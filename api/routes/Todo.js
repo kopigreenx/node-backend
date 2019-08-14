@@ -35,10 +35,7 @@ router.post('/',(req ,res, next) => {
     todoData
     .save()
     .then((result) => {
-        res.status(201).json({
-            message: 'Handling POST request /todo',
-            createTodo: result
-        });
+        res.status(201).json(result);
     })
     .catch((err) => {
         console.log(err);
