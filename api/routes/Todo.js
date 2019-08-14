@@ -45,9 +45,9 @@ router.post('/',(req ,res, next) => {
     });
 });
 
-router.patch('/:todosId', (req, res, next) => {
+router.put('/:todosId', (req, res, next) => {
     const id = req.params.todosId;
-    todoSchema.update({
+    todoSchema.updateOne({
             _id: id
         }, {
             $set: {
@@ -56,7 +56,12 @@ router.patch('/:todosId', (req, res, next) => {
             }
         })
         .exec().then((result) => {
-            res.status(201).json(result);
+            const data = {
+                _id: req.params.todosId,
+                description: req.body.description,
+                confirmed: req.body.confirmed
+            }
+            res.status(201).json(data);
         }).catch((err) => {
             res.status(500).json({
                 error: err
@@ -66,13 +71,12 @@ router.patch('/:todosId', (req, res, next) => {
 
 router.delete('/:todosId', (req, res, next) => {
     const id = req.params.todosId;
-    todoSchema.remove({_id:id})
+    todoSchema.deleteOne({
+        _id: id
+    })
     .exec()
     .then((result) => {
-        res.status(201).json({
-            message: 'Handling DELETE request /todo with params ',
-            result: result
-        });
+        res.status(201).json(result);
     }).catch((err) => {
         res.status(500).json({
             error: err
