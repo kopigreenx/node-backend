@@ -13,13 +13,20 @@ router.post('/login',(req,res,next) =>{
         .find({username:username})
         .exec().then((result) => {
             if (result.length > 0) {
+                var token = jwt.sign({
+                    id: result[0]._id,
+                    username:result[0].username
+                }, process.env.JWT_SECRET,{
+                    expiresIn:86400
+                })
                 res.status(200).json({
-                    status:"success",
-                    data: result
+                    data: result,
+                    auth:true,
+                    token:token
                 })
             }else{
-                res.status(200).json({
-                    status: "failed",
+                res.status(500).json({
+                    auth: false,
                     data: "user not found"
                 })
             }

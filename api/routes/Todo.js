@@ -2,10 +2,15 @@ const express = require('express')
 const router = express.Router();
 const mongoose = require('mongoose')
 const todoSchema = require('../models/todos')
+const jwt = require('jsonwebtoken')
+const Auth = require('../../controllers/auth')
 
-router.get('/',(req ,res, next) => {
+router.get('/',Auth,(req ,res, next) => {
     todoSchema.find().exec().then((result) => {
-        res.status(201).json(result);
+        res.status(201).json({
+            data: result,
+            token: req.token
+        });
     }).catch((err) => {
         res.status(500).json({
             error: err
@@ -13,7 +18,7 @@ router.get('/',(req ,res, next) => {
     });
 });
 
-router.get('/:todosId',(req ,res, next) => {
+router.get('/:todosId', Auth, (req, res, next) => {
      const id = req.params.todosId;
      todoSchema.findById(id).exec().then((result) => {
          res.status(201).json(result);
@@ -24,7 +29,7 @@ router.get('/:todosId',(req ,res, next) => {
      });
 });
 
-router.post('/',(req ,res, next) => {
+router.post('/', Auth, (req, res, next) => {
 
     const todoData = new todoSchema({
         _id: new mongoose.Types.ObjectId,
@@ -45,7 +50,7 @@ router.post('/',(req ,res, next) => {
     });
 });
 
-router.put('/:todosId', (req, res, next) => {
+router.put('/:todosId', Auth, (req, res, next) => {
     const id = req.params.todosId;
     todoSchema.updateOne({
             _id: id
@@ -69,7 +74,7 @@ router.put('/:todosId', (req, res, next) => {
         });
 });
 
-router.delete('/:todosId', (req, res, next) => {
+router.delete('/:todosId', Auth, (req, res, next) => {
     const id = req.params.todosId;
     todoSchema.deleteOne({
         _id: id
