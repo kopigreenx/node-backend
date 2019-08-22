@@ -7,6 +7,7 @@ const cors = require('cors')
 
 const todoRoutes = require('./api/routes/Todo')
 const userRoutes = require('./api/routes/Users')
+const todoDetailRoute = require('./api/routes/TodoDetail')
 
 mongoose.connect('mongodb://localhost:27017/my_data',{useNewUrlParser:true})
 
@@ -29,6 +30,7 @@ app.use((req,res,next) => {
 // REQUEST ROUTES
 app.use('/todos',todoRoutes);
 app.use('/users',userRoutes);
+app.use('/todosDetail', todoDetailRoute);
 
 //ERROR HANDLING
 app.use((req, res, next) => {

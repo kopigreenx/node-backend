@@ -1,8 +1,7 @@
 const express = require('express')
 const router = express.Router();
 const mongoose = require('mongoose')
-const todoSchema = require('../models/todos')
-const jwt = require('jsonwebtoken')
+const todoSchema = require('../models/mTodosDetail')
 const Auth = require('../../controllers/auth')
 
 router.get('/',(req ,res, next) => {
@@ -17,7 +16,7 @@ router.get('/',(req ,res, next) => {
 
 router.get('/:todosId', Auth, (req, res, next) => {
      const id = req.params.todosId;
-     todoSchema.findById(id).exec().then((result) => {
+     todoSchema.find({parent_id:id}).exec().then((result) => {
          res.status(201).json(result);
      }).catch((err) => {
          res.status(500).json({
@@ -30,6 +29,7 @@ router.post('/', Auth, (req, res, next) => {
 
     const todoData = new todoSchema({
         _id: new mongoose.Types.ObjectId,
+        parent_id:req.body.parent_id,
         description: req.body.description,
         confirmed: req.body.confirmed
     });
@@ -50,7 +50,8 @@ router.post('/', Auth, (req, res, next) => {
 router.put('/:todosId', Auth, (req, res, next) => {
     const id = req.params.todosId;
     todoSchema.updateOne({
-            _id: id
+            _id: id,
+            parent_id:req.body.parent_id
         }, {
             $set: {
                 description: req.body.description,
@@ -60,6 +61,7 @@ router.put('/:todosId', Auth, (req, res, next) => {
         .exec().then((result) => {
             const data = {
                 _id: req.params.todosId,
+                parent_id: req.body.parent_id,
                 description: req.body.description,
                 confirmed: req.body.confirmed
             }
@@ -73,8 +75,8 @@ router.put('/:todosId', Auth, (req, res, next) => {
 
 router.delete('/:todosId', Auth, (req, res, next) => {
     const id = req.params.todosId;
-    todoSchema.deleteOne({
-        _id: id
+    todoSchema.deleteMany({
+        parent_id: id
     })
     .exec()
     .then((result) => {
